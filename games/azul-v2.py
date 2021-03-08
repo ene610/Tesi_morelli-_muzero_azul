@@ -16,8 +16,6 @@ class MuZeroConfig:
         self.seed = 0  # Seed for numpy, torch and the game
         self.max_num_gpus = None  # Fix the maximum number of GPUs to use. It's usually faster to use a single GPU (set it to 1) if it has enough memory. None will use every GPUs available
 
-
-
         ### Game
         self.observation_shape = (1, 15, 12)  # Dimensions of the game observation, must be 3D (channel, height, width). For a 1D array, please reshape it to (1, 1, length of array)
         self.action_space = list(range(180))  # Fixed list of all possible actions. You should only edit the length
@@ -357,6 +355,8 @@ class Azul_game():
             penality_row = self.penalty_row_p1
         else:
             penality_row = self.penalty_row_p2
+
+        self.penality_for_action = 0
 
         #se si riempie la penality column allora vanno scartate le tessere
         for i in range(7):
@@ -782,8 +782,12 @@ class Azul:
         #prossimo player
 
         done = self.have_winner()
+        self.game.penality_for_action
 
-        reward = self.game.p1_score if self.game.is_done_phase else 0
+        if(self.game.is_done_phase):
+            reward = self.game.p1_score  
+        else : 
+            reward = 0
 
         self.player = 0 if self.game.play_turn == "P1" else 1
 
