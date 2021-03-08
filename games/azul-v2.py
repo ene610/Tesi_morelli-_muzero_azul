@@ -744,6 +744,7 @@ class Azul:
 
     def reset(self):
         #ToDO taglia in slice il game 
+        self.game = Azul_game()
         if self.game.gameover :
             self.game = Azul_game()
         else:
@@ -785,9 +786,9 @@ class Azul:
         self.game.penality_for_action
 
         if(self.game.is_done_phase):
-            reward = self.game.p1_score  
+            reward = self.game.p1_score  if self.game.play_turn == "P1" else self.game.p2_score
         else : 
-            reward = 0
+            reward = 1
 
         self.player = 0 if self.game.play_turn == "P1" else 1
 
