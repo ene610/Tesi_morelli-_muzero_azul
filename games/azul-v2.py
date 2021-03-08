@@ -785,12 +785,15 @@ class Azul:
         done = self.have_winner()
         self.game.penality_for_action
 
-        if(self.game.is_done_phase):
-            reward = self.game.p1_score if self.game.play_turn == "P1" else self.game.p2_score
-        else : 
-            reward = 0
+        #if self.game.is_done_phase:
+        #    reward = self.game.p1_score if self.game.play_turn == "P1" else self.game.p2_score
+        #else : 
+        #    reward = 0
+        #
 
-        self.player = 0 if self.game.play_turn == "P1" else 1
+        reward = 10 - self.game.penality_for_action
+
+        self.player = 1 if self.game.play_turn == "P1" else 0
 
         return self.get_observation(), reward, done
 
