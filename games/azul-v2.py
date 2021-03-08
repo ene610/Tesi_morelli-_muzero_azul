@@ -790,9 +790,10 @@ class Azul:
         #else : 
         #    reward = 0
         #
-
+        
         reward = 10 - self.game.penality_for_action
-
+        
+        print(reward,self.player)
         self.player = 1 if self.game.play_turn == "P1" else 0
 
         return self.get_observation(), reward, done
