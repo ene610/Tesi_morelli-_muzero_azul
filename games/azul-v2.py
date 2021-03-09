@@ -793,11 +793,14 @@ class Azul:
         # else : 
         #    reward = 0
         #
+        if done:
+            reward = 1
+        else:
+            reward = 0
+        #reward = 10 - self.game.penality_for_action
         
-        reward = 10 - self.game.penality_for_action
-        
-        print(reward, self.game.player_turn, " next player:")
-        self.game.print_table()        
+        #print(reward, self.game.player_turn, " next player:")
+        #self.game.print_table()        
 
         
         
