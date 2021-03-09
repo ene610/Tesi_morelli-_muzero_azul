@@ -26,6 +26,7 @@ class SharedStorage:
 
     def get_info(self, keys):
         if isinstance(keys, str):
+            print("get info",self.current_checkpoint[keys])
             return self.current_checkpoint[keys]
         elif isinstance(keys, list):
             return {key: self.current_checkpoint[key] for key in keys}
