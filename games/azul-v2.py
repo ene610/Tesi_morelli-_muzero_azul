@@ -704,7 +704,7 @@ class Azul:
         pd_row_p1 = pd.DataFrame(self.game.rows_p1).fillna(0)
         row_p1_with_penality_and_score = pd.concat([pd_row_p1, pd_penality_p1_and_score], axis=1).to_numpy().astype(int)
 
-        #stesso processo per p2
+        #stesso processo per p2 -----------------------------------------
         lst_penality_p2_and_score = self.game.penalty_row_p2 + [0, self.game.p2_score]
 
         np_penality_p2_and_score = np.array(lst_penality_p2_and_score)
@@ -743,11 +743,14 @@ class Azul:
         return 0 if self.game.play_turn == "P1" else 1
 
     def reset(self):
+
         #ToDO taglia in slice il game 
         #self.game = Azul_game()
+
         if self.game.gameover :
             self.game = Azul_game()
-        else:
+        
+        else :
             self.game.create_drawing_pit()
         
         #ToDO board azul 
@@ -785,15 +788,19 @@ class Azul:
         done = self.have_winner()
         self.game.penality_for_action
 
-        #if self.game.is_done_phase:
+        # if self.game.is_done_phase:
         #    reward = self.game.p1_score if self.game.play_turn == "P1" else self.game.p2_score
-        #else : 
+        # else : 
         #    reward = 0
         #
         
         reward = 10 - self.game.penality_for_action
+
+        alfa = "P2" if self.game.play_turn == "P1" else "P1"
+
+
+        print(reward, self.player, " next player:", alfa)
         
-        print(reward,self.player)
         self.player = 1 if self.game.play_turn == "P1" else 0
 
         return self.get_observation(), reward, done
@@ -802,6 +809,7 @@ class Azul:
         return self.board_to_obs()
 
     def legal_actions(self):
+        
         legal = []
         legal_action_tuple = self.game.valid_actions("P1" if self.player == 0 else "P2")
         for elem in legal_action_tuple:
