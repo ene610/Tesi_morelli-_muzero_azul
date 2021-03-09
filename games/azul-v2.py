@@ -96,7 +96,7 @@ class MuZeroConfig:
         ### Replay Buffer
         self.replay_buffer_size = 3000  # Number of self-play games to keep in the replay buffer
         self.num_unroll_steps = 20  # Number of game moves to keep for every batch element
-        self.td_steps = 20  # Number of steps in the future to take into account for calculating the target value
+        self.td_steps = 25  # Number of steps in the future to take into account for calculating the target value
         self.PER = True  # Prioritized Replay (See paper appendix Training), select in priority the elements in the replay buffer which are unexpected for the network
         self.PER_alpha = 0.5  # How much prioritization is used, 0 corresponding to the uniform case, paper suggests 1
 
@@ -745,7 +745,7 @@ class Azul:
     def reset(self):
 
         #ToDO taglia in slice il game 
-        #self.game = Azul_game()
+        self.game = Azul_game()
 
         if self.game.gameover :
             self.game = Azul_game()
