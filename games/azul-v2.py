@@ -144,7 +144,7 @@ class Game(AbstractGame):
             The new observation, the reward and a boolean if the game has ended.
         """
         observation, reward, done = self.env.step(action)
-        return observation, reward * 10, done
+        return observation, reward, done
 
     def to_play(self):
         """
@@ -795,13 +795,13 @@ class Azul:
         #
         
         reward = 10 - self.game.penality_for_action
-
-        alfa = "P2" if self.game.play_turn == "P1" else "P1"
-
-
-        print(reward, self.player, " next player:", alfa)
         
-        self.player = 1 if self.game.play_turn == "P1" else 0
+        print(reward, self.game.play_turn, " next player:")
+        self.game.print_table()        
+
+        
+        
+        #self.player = 1 if self.game.play_turn == "P1" else 0
 
         return self.get_observation(), reward, done
 
