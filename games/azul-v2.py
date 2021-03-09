@@ -796,7 +796,7 @@ class Azul:
         
         reward = 10 - self.game.penality_for_action
         
-        print(reward, self.game.play_turn, " next player:")
+        print(reward, self.game.player_turn, " next player:")
         self.game.print_table()        
 
         
