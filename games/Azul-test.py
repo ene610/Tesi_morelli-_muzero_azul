@@ -31,7 +31,7 @@ class MuZeroConfig:
         ### Self-Play
         self.num_workers = 1  # Number of simultaneous threads/workers self-playing to feed the replay buffer
         self.selfplay_on_gpu = True
-        self.max_moves = 3  # Maximum number of moves if game is not finished before
+        self.max_moves = 20  # Maximum number of moves if game is not finished before
         self.num_simulations = 4  # Number of future moves self-simulated
         self.discount = 0.997  # Chronological discount of the reward
         self.temperature_threshold = None  # Number of moves before dropping the temperature given by visit_softmax_temperature_fn to 0 (ie selecting the best action). If None, visit_softmax_temperature_fn is used every time
@@ -732,7 +732,7 @@ class Azul:
         return [complete_board]
 
     def to_play(self):
-        return 0 if self.game.play_turn == "P1" else 1
+        return 0 if self.game.player_turn == "P1" else 1
 
     def reset(self):
 
@@ -759,7 +759,7 @@ class Azul:
         #valid_move = self.game.valid_move("P1", action_pit_choice, action_tile_type, action_column_choice)
         #fai azione
         self.game.play_turn(self.game.player_turn, action_pit_choice, action_tile_type, action_column_choice)
-
+        
         self.game.is_turn_done()
         self.game.is_game_done()
 
@@ -778,7 +778,8 @@ class Azul:
         #prossimo player
 
         done = self.have_winner()
-        self.game.penality_for_action
+
+        
 
         # if self.game.is_done_phase:
         #    reward = self.game.p1_score if self.game.play_turn == "P1" else self.game.p2_score
@@ -790,8 +791,9 @@ class Azul:
         else:
             reward = 0
         
-        #reward = 10 - self.game.penality_for_action
+        reward = 10 - self.game.penality_for_action
         
+        self.player = self.to_play()
         #print(reward, self.game.player_turn, " next player:")
         #self.game.print_table()        
 
