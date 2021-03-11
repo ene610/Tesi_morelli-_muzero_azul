@@ -31,7 +31,7 @@ class MuZeroConfig:
         ### Self-Play
         self.num_workers = 1  # Number of simultaneous threads/workers self-playing to feed the replay buffer
         self.selfplay_on_gpu = True
-        self.max_moves = 20  # Maximum number of moves if game is not finished before
+        self.max_moves = 30  # Maximum number of moves if game is not finished before
         self.num_simulations = 4  # Number of future moves self-simulated
         self.discount = 0.997  # Chronological discount of the reward
         self.temperature_threshold = None  # Number of moves before dropping the temperature given by visit_softmax_temperature_fn to 0 (ie selecting the best action). If None, visit_softmax_temperature_fn is used every time
@@ -737,7 +737,7 @@ class Azul:
     def reset(self):
 
         #ToDO taglia in slice il game 
-        self.game = Azul_game()
+        #self.game = Azul_game()
 
         if self.game.gameover :
             self.game = Azul_game()
@@ -747,7 +747,7 @@ class Azul:
         
         #ToDO board azul 
         self.board = self.board_to_obs()
-        self.player = 0 if self.game.play_turn == "P1" else 1
+        self.player = 0 if self.game.play_turn == "P1" else 1 #cambia in to_play
         return self.get_observation()
 
     def step(self, action):
@@ -791,9 +791,9 @@ class Azul:
         
         reward = 10 - self.game.penality_for_action
         
-        print("pre",self.player)
+        #print("pre",self.player)
         self.player = self.to_play()
-        print("post",self.player)
+        #print("post",self.player)
         #print(reward, self.game.player_turn, " next player:")
         #self.game.print_table()        
 
