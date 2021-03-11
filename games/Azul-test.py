@@ -1,6 +1,6 @@
 import datetime
 import os
-
+import random
 import gym
 import numpy
 import torch
@@ -779,8 +779,6 @@ class Azul:
 
         done = self.have_winner()
 
-        
-
         # if self.game.is_done_phase:
         #    reward = self.game.p1_score if self.game.play_turn == "P1" else self.game.p2_score
         # else : 
@@ -793,7 +791,9 @@ class Azul:
         
         reward = 10 - self.game.penality_for_action
         
+        print("pre",self.player)
         self.player = self.to_play()
+        print("post",self.player)
         #print(reward, self.game.player_turn, " next player:")
         #self.game.print_table()        
 
