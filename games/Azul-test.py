@@ -21,7 +21,7 @@ class MuZeroConfig:
         ### Game
         self.observation_shape = (1, 15, 12)  # Dimensions of the game observation, must be 3D (channel, height, width). For a 1D array, please reshape it to (1, 1, length of array)
         self.action_space = list(range(180))  # Fixed list of all possible actions. You should only edit the length
-        self.players = list(range(1))  # List of players. You should only edit the length
+        self.players = list(range(2))  # List of players. You should only edit the length
         self.stacked_observations = 0  # Number of previous observations and previous actions to add to the current observation
 
         # Evaluate
@@ -31,7 +31,7 @@ class MuZeroConfig:
         ### Self-Play
         self.num_workers = 1  # Number of simultaneous threads/workers self-playing to feed the replay buffer
         self.selfplay_on_gpu = True
-        self.max_moves = 20  # Maximum number of moves if game is not finished before
+        self.max_moves = 3  # Maximum number of moves if game is not finished before
         self.num_simulations = 4  # Number of future moves self-simulated
         self.discount = 0.997  # Chronological discount of the reward
         self.temperature_threshold = None  # Number of moves before dropping the temperature given by visit_softmax_temperature_fn to 0 (ie selecting the best action). If None, visit_softmax_temperature_fn is used every time
@@ -51,10 +51,10 @@ class MuZeroConfig:
         # Residual Network
         self.downsample = False  # Downsample observations before representation network, False / "CNN" (lighter) / "resnet" (See paper appendix Network Architecture)
         self.blocks = 1  # Number of blocks in the ResNet
-        self.channels = 2  # Number of channels in the ResNet
-        self.reduced_channels_reward = 2  # Number of channels in reward head
-        self.reduced_channels_value = 2  # Number of channels in value head
-        self.reduced_channels_policy = 2  # Number of channels in policy head
+        self.channels = 1  # Number of channels in the ResNet
+        self.reduced_channels_reward = 1  # Number of channels in reward head
+        self.reduced_channels_value = 1  # Number of channels in value head
+        self.reduced_channels_policy = 1  # Number of channels in policy head
         self.resnet_fc_reward_layers = []  # Define the hidden layers in the reward head of the dynamic network
         self.resnet_fc_value_layers = []  # Define the hidden layers in the value head of the prediction network
         self.resnet_fc_policy_layers = []  # Define the hidden layers in the policy head of the prediction network
