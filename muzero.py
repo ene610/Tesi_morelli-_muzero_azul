@@ -263,8 +263,6 @@ class MuZero:
             while info["training_step"] < self.config.training_steps:
                 info = ray.get(self.shared_storage_worker.get_info.remote(keys))
                 
-                print(type(info),info)
-                
                 writer.add_scalar(
                     "1.Total_reward/1.Total_reward",
                     info["total_reward"],
