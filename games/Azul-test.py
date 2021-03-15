@@ -701,7 +701,7 @@ class Azul_game():
 
             for i in range(5):
                 for j in range(5):
-                    if(scoreboard[i][j] == 1):
+                    if(board[i][j] == 1):
                         tile_array[(i+j) % 5] = tile_array[(i+j) % 5] + 1 * i
                 i = i + 1
 
