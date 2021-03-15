@@ -91,8 +91,6 @@ class MuZeroConfig:
         self.lr_decay_rate = 1  # Set it to 1 to use a constant learning rate
         self.lr_decay_steps = 10000
 
-
-
         ### Replay Buffer
         self.replay_buffer_size = 3000  # Number of self-play games to keep in the replay buffer
         self.num_unroll_steps = 20  # Number of game moves to keep for every batch element
@@ -103,8 +101,6 @@ class MuZeroConfig:
         # Reanalyze (See paper appendix Reanalyse)
         self.use_last_model_value = True  # Use the last model to provide a fresher, stable n-step value (See paper appendix Reanalyze)
         self.reanalyse_on_gpu = False
-
-
 
         ### Adjust the self play / training ratio to avoid over/underfitting
         self.self_play_delay = 0  # Number of seconds to wait after each played game
@@ -220,7 +216,6 @@ class Game(AbstractGame):
         action_pit_choice, action_tile_type, action_column_choice = self.env.game.from_action_to_tuple_action(action_number)
         return f"Play-> pit: {action_pit_choice}, tile_color: {action_tile_type}, column : {action_column_choice}"
         #return f"Play column {action_number + 1}"
-
 
 class Azul_game():
 
@@ -797,13 +792,12 @@ class Azul:
             reward = 1
         else:
             reward = 0
+        
         #reward = 10 - self.game.penality_for_action
         
         #print(reward, self.game.player_turn, " next player:")
         #self.game.print_table()        
 
-        
-        
         #self.player = 1 if self.game.play_turn == "P1" else 0
 
         return self.get_observation(), reward, done

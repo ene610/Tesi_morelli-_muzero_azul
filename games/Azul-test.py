@@ -240,6 +240,7 @@ class Azul_game():
         self.gameover = False
         self.is_done_phase = False
 
+        self.inserted_tile_in_column_for_action = 0
         self.penality_for_action = 0
 
 
@@ -331,15 +332,19 @@ class Azul_game():
         if (column_choice == 5):
             self.insert_tiles_in_penalty_column(number_of_drawed_tile, player)
             return
-
+        
+        self.inserted_tile_in_column_for_action =  0
+        
         for i in range(column_choice + 1):
 
                 if (rows[column_choice][i] == 0 and number_of_drawed_tile > 0):
+                   
                     rows[column_choice][i] = tile_type + 1
+                    self.inserted_tile_in_column_for_action = self.inserted_tile_in_column_for_action + 1
                     number_of_drawed_tile = number_of_drawed_tile - 1
 
-                #mette le rimanenti nella penality column
-                self.insert_tiles_in_penalty_column(number_of_drawed_tile, player)
+        #mette le rimanenti nella penality column
+        self.insert_tiles_in_penalty_column(number_of_drawed_tile, player)
 
     def insert_tiles_in_penalty_column(self, number_of_tiles, player):
         
@@ -572,37 +577,48 @@ class Azul_game():
         else : return False
 
     def compute_final_points(self):
+
         def row_completed_score(scoreboard):
+
             row_completed = 0
             for row in scoreboard:
                 n_tile_in_a_row = 0
-                for tile in row:
+
+                for tile in row :
                     if(tile == 1):
                         n_tile_in_a_row = n_tile_in_a_row +1
                 if(n_tile_in_a_row == 5):
                     row_completed = row_completed + 1
             return row_completed * 2
+
         def column_completed_score(scoreboard):
+
             column_completed = 0
             cumulative = [0,0,0,0,0]
 
             for row in scoreboard:
                 cumulative = cumulative + row
+
             for elem in cumulative:
                 if(elem == 5):
                     column_completed = column_completed + 1
+
             return column_completed * 5
 
         def tile_completed_score(scoreboard):
+
             tile_completed = 0
             tile_array = [0,0,0,0,0]
+
             for i in range(5):
                 for j in range(5):
                     if(scoreboard[i][j] == 1):
                         tile_array[(i+j) % 5] = tile_array[(i+j) % 5] + 1
+
             for elem in tile_array:
                 if(elem == 5):
                     tile_completed = tile_completed + 1
+
             return tile_completed *7
 
 
@@ -612,6 +628,153 @@ class Azul_game():
         #calcola per P2
         scoreboard = self.board_p2
         self.p2_score = self.p2_score + row_completed_score(scoreboard) + column_completed_score(scoreboard) + tile_completed_score(scoreboard)
+
+    def action_analisys(self, player, tile_type, column_choice): # TODO refactor name (tipo analisi qualcosa)
+        
+        def compute_expected_row_points(row_array, column_choice, tile_type, board):
+
+            expected_row_points = 0
+
+            row_choice = row_array[column_choice]
+            index_of_inserted_element = (tile_type + column_choice) % 5
+            flag = False
+
+            for i in range(5):
+                if i == index_of_inserted_element:
+                    expected_row_points = expected_row_points + 1
+                else:
+                    if row_choice[i] == 1 :
+                        expected_row_points = expected_row_points + 1
+                    else:
+                        if flag :
+                            expected_row_points = 0
+                        else :
+                            else expected_row_points
+
+            return expected_row_points
+
+        def compute_expected_column_points(row_array, column_choice, tile_type, board):
+            
+            flag = False
+            expected_column_points_for_action = 0
+
+            for i in range(5):
+                if i == column_choice:
+                    expected_column_points_for_action = expected_column_points_for_action + 1
+                    flag = True
+                else : 
+                    if board[i][tile_type] != 0:
+                        expected_column_points_for_action = expected_column_points_for_action + 1
+                    else:
+                        #controlla che se la row  è piena e che quindi verrà considerata successivamente come piazzata
+                        for tile in row_array[i]:
+                            if tile == 0:
+                                if not flag : expected_column_points_for_action = 0
+                                else: return  expected_column_points_for_action
+                            else : expected_column_points_for_action = expected_column_points_for_action + 1
+            return expected_column_points_for_action
+            
+        def action_analisys_row(board, column_choice):
+            count_tiles_in_row = 0
+
+            for tile in board[column_choice]:
+                if tile != 0:
+                    count_tiles_in_row = count_tiles_in_row + 1
+
+            return count_tiles_in_row
+
+        def action_analisys_column(board, tile_type):
+            
+            cumulative = np.array([0,0,0,0,0])
+            i = 1
+            for row in board:
+                np.array(row) * i
+                cumulative = np.add(cumulative, row)
+                i + 1
+                    
+            return cumulative[tile_type]       
+
+        def action_analisys_color(board, tile_type):
+
+            tile_completed = 0
+            tile_array = [0, 0, 0, 0, 0]
+            i = 1
+
+            for i in range(5):
+                for j in range(5):
+                    if(scoreboard[i][j] == 1):
+                        tile_array[(i+j) % 5] = tile_array[(i+j) % 5] + 1 * i
+                i = i + 1
+
+            return tile_array[tile_type]
+            
+        row, column, color, expected_row_points, expected_column_point = 0, 0, 0, 0, 0
+
+        if player == "P1" :
+
+            board = self.board_p1
+            row_array = self.rows_p1
+
+        else :
+
+            board = self.board_p2
+            row_array = self.rows_p2
+        
+        if column_choice == 5:
+            return row, column, color
+        
+        count_tiles_in_column = 0
+
+        for tile in row_array[column_choice]:
+            if tile == (tile_type + 1):
+                count_tiles_in_column = count_tiles_in_column + 1
+        
+        if count_tiles == (column_choice + 1):
+            expected_row_points = compute_expected_row_points(row_array, column_choice, tile_type, board)
+            expected_column_point = compute_expected_column_points(row_array, column_choice, tile_type, board)
+       
+        row = count_tiles_in_column + action_analisys_row(board, column_choice)
+        column = count_tiles_in_column + action_analisys_column(board, tile_type)
+        color = count_tiles_in_column + action_analisys_color(board, tile_type)
+
+        return row, column, color, expected_row_points, expected_column_point
+        
+        def action_analisys_row(board, column_choice):
+            count_tiles_in_row = 0
+
+            for tile in board[column_choice]:
+                if tile != 0:
+                    count_tiles_in_row = count_tiles_in_row + 1
+
+            return count_tiles_in_row
+
+        def action_analisys_column(board, tile_type):
+            
+            cumulative = np.array([0,0,0,0,0])
+            i = 1
+            for row in board:
+                np.array(row) * i
+                cumulative = np.add(cumulative, row)
+                i + 1
+                    
+            return cumulative[tile_type]
+
+        def action_analisys_color(board, tile_type):
+
+            tile_completed = 0
+            tile_array = [0, 0, 0, 0, 0]
+            i = 1
+
+            for i in range(5):
+                for j in range(5):
+                    if(scoreboard[i][j] == 1):
+                        tile_array[(i+j) % 5] = tile_array[(i+j) % 5] + 1 * i
+                i = i + 1
+
+            return tile_array[tile_type]
+            
+
+
 
     def from_action_to_tuple_action(self,action):
 
@@ -757,9 +920,12 @@ class Azul:
         
         #controlla azione sia valida
         #valid_move = self.game.valid_move("P1", action_pit_choice, action_tile_type, action_column_choice)
+
         #fai azione
         self.game.play_turn(self.game.player_turn, action_pit_choice, action_tile_type, action_column_choice)
-        
+
+        row_analisys, column_analisys, color_analisys = action_analisys(self, player, tile_type, column_choice)
+
         self.game.is_turn_done()
         self.game.is_game_done()
 
@@ -779,17 +945,23 @@ class Azul:
 
         done = self.have_winner()
 
-        # if self.game.is_done_phase:
+        # if self.game.is_done_phase :
         #    reward = self.game.p1_score if self.game.play_turn == "P1" else self.game.p2_score
         # else : 
         #    reward = 0
-        #
-        if done:
-            reward = 1
-        else:
-            reward = 0
         
-        reward = 10 - self.game.penality_for_action
+        #TODO!
+        penality = self.game.penality_for_action
+        column_complete_reward = 0
+        row_complete_reward = 0
+        placed_tile_reward = self.inserted_tile_in_column_for_action * 0.1
+        #rifattorizza come objective
+        row_reward = 2 * row_analisys / (5 * (action_column_choice + 1))
+        column_reward = 5 * (column_analisys / 15)
+        color_reward = 7 * (color_analisys / 15)
+        reward =  placed_tile_reward + row_reward + column_reward + color_reward - penality
+        
+        #reward = 10 - self.game.penality_for_action
         
         #print("pre",self.player)
         self.player = self.to_play()

@@ -25,10 +25,13 @@ class SharedStorage:
         return copy.deepcopy(self.current_checkpoint)
 
     def get_info(self, keys):
+        
         if isinstance(keys, str):
             return self.current_checkpoint[keys]
+
         elif isinstance(keys, list):
             return {key: self.current_checkpoint[key] for key in keys}
+            
         else:
             raise TypeError
 

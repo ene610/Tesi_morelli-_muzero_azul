@@ -149,8 +149,8 @@ class MuZero:
 
         # Initialize workers
         self.training_worker = trainer.Trainer.options(
-            num_cpus=0,
-            num_gpus=num_gpus_per_worker if self.config.train_on_gpu else 0,
+            num_cpus = 0,
+            num_gpus = num_gpus_per_worker if self.config.train_on_gpu else 0,
         ).remote(self.checkpoint, self.config)
 
         self.shared_storage_worker = shared_storage.SharedStorage.remote(
@@ -270,6 +270,7 @@ class MuZero:
                     info["total_reward"],
                     counter,
                 )
+                
                 writer.add_scalar(
                     "1.Total_reward/2.Mean_value",
                     info["mean_value"],
