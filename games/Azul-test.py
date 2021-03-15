@@ -918,7 +918,7 @@ class Azul:
         #fai azione
         self.game.play_turn(self.game.player_turn, action_pit_choice, action_tile_type, action_column_choice)
 
-        row_analisys, column_analisys, color_analisys, expected_row_points, expected_column_point = action_analisys(self, player, tile_type, column_choice)
+        row_analisys, column_analisys, color_analisys, expected_row_points, expected_column_point = self.game.action_analisys(self, player, tile_type, column_choice)
 
         self.game.is_turn_done()
         self.game.is_game_done()
