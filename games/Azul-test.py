@@ -728,7 +728,7 @@ class Azul_game():
             if tile == (tile_type + 1):
                 count_tiles_in_column = count_tiles_in_column + 1
         
-        if count_tiles == (column_choice + 1):
+        if count_tiles_in_column == (column_choice + 1):
             expected_row_points = compute_expected_row_points(row_array, column_choice, tile_type, board)
             expected_column_point = compute_expected_column_points(row_array, column_choice, tile_type, board)
        
