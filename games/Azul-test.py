@@ -949,7 +949,7 @@ class Azul:
         penality = self.game.penality_for_action
         column_complete_reward = expected_column_point
         row_complete_reward = expected_row_points
-        placed_tile_reward = self.inserted_tile_in_column_for_action * 0.1
+        placed_tile_reward = self.game.inserted_tile_in_column_for_action * 0.1
         
         #rifattorizza come objective
         row_reward = 2 * row_analisys / (5 * (action_column_choice + 1))
