@@ -720,7 +720,7 @@ class Azul_game():
             row_array = self.rows_p2
         
         if column_choice == 5:
-            return row, column, color
+            return row, column, color, expected_row_points, expected_column_point
         
         count_tiles_in_column = 0
 
@@ -959,6 +959,7 @@ class Azul:
         color_reward = 7 * (color_analisys / 15)
         reward =  placed_tile_reward + row_reward + column_reward + color_reward - penality
         
+        print("reward", reward)
         #reward = 10 - self.game.penality_for_action
         
         self.player = self.to_play()
