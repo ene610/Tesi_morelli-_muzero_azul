@@ -735,6 +735,8 @@ class Azul_game():
         row = count_tiles_in_column + action_analisys_row(board, column_choice)
         column = count_tiles_in_column + action_analisys_column(board, tile_type)
         color = count_tiles_in_column + action_analisys_color(board, tile_type)
+        print("ci siamo")
+        print(row, column, color, expected_row_points, expected_column_point)
 
         return row, column, color, expected_row_points, expected_column_point
         
