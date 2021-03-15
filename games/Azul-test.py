@@ -635,7 +635,7 @@ class Azul_game():
 
             expected_row_points = 0
 
-            row_choice = row_array[column_choice]
+            row_choice = board[column_choice]
             index_of_inserted_element = (tile_type + column_choice) % 5
             flag = False
 
