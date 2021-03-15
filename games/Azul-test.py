@@ -646,10 +646,9 @@ class Azul_game():
                     if row_choice[i] == 1 :
                         expected_row_points = expected_row_points + 1
                     else:
-                        if flag :
-                            expected_row_points = 0
-                        else :
-                            else expected_row_points
+                        if flag : expected_row_points = 0    
+                        else : expected_row_points
+                             
 
             return expected_row_points
 
@@ -772,9 +771,6 @@ class Azul_game():
                 i = i + 1
 
             return tile_array[tile_type]
-            
-
-
 
     def from_action_to_tuple_action(self,action):
 
@@ -841,6 +837,7 @@ class Azul_game():
 class Azul:
 
     def __init__(self):
+
         self.game = Azul_game()
         self.player = 0 if self.game.play_turn == "P1" else 1
         
@@ -899,9 +896,6 @@ class Azul:
 
     def reset(self):
 
-        #ToDO taglia in slice il game 
-        #self.game = Azul_game()
-
         if self.game.gameover :
             self.game = Azul_game()
         
@@ -924,7 +918,7 @@ class Azul:
         #fai azione
         self.game.play_turn(self.game.player_turn, action_pit_choice, action_tile_type, action_column_choice)
 
-        row_analisys, column_analisys, color_analisys = action_analisys(self, player, tile_type, column_choice)
+        row_analisys, column_analisys, color_analisys, expected_row_points, expected_column_point = action_analisys(self, player, tile_type, column_choice)
 
         self.game.is_turn_done()
         self.game.is_game_done()
@@ -952,9 +946,10 @@ class Azul:
         
         #TODO!
         penality = self.game.penality_for_action
-        column_complete_reward = 0
-        row_complete_reward = 0
+        column_complete_reward = expected_column_point
+        row_complete_reward = expected_row_points
         placed_tile_reward = self.inserted_tile_in_column_for_action * 0.1
+        
         #rifattorizza come objective
         row_reward = 2 * row_analisys / (5 * (action_column_choice + 1))
         column_reward = 5 * (column_analisys / 15)
@@ -963,11 +958,7 @@ class Azul:
         
         #reward = 10 - self.game.penality_for_action
         
-        #print("pre",self.player)
         self.player = self.to_play()
-        #print("post",self.player)
-        #print(reward, self.game.player_turn, " next player:")
-        #self.game.print_table()        
 
         #self.player = 1 if self.game.play_turn == "P1" else 0
 
