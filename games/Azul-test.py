@@ -185,10 +185,20 @@ class Game(AbstractGame):
         Returns:
             An integer from the action space.
         """
-        choice = input(f"Enter the column to play for the player {self.to_play()}: ")
-        while choice not in [str(action) for action in self.legal_actions()]:
-            choice = input("Enter another column : ")
-        return int(choice)
+
+        #TODO modifica per farlo entrare subito nel while
+        pit = input(f"Enter the pit to play for the player {self.to_play()}: ")
+        color = input(f"Enter the color to play for the player {self.to_play()}: ")
+        row = input(f"Enter the row to play for the player {self.to_play()}: ")
+        action_numerical = self.env.game.from_tuple_action_to_action(pit ,color ,row)
+
+        while action_numerical not in [action_numerical for action in self.legal_actions()]:
+            pit = input(f"Enter the pit to play for the player {self.to_play()}: ")
+            color = input(f"Enter the color to play for the player {self.to_play()}: ")
+            row = input(f"Enter the row to play for the player {self.to_play()}: ")
+            action_numerical = self.env.game.from_tuple_action_to_action(pit ,color ,row)
+
+        return int(action_numerical)
 
     def expert_agent(self):
         """
@@ -949,13 +959,16 @@ class Azul:
         penality = self.game.penality_for_action
         column_complete_reward = expected_column_point
         row_complete_reward = expected_row_points
-        placed_tile_reward = self.game.inserted_tile_in_column_for_action * 0.1
+        placed_tile_reward = self.game.inserted_tile_in_column_for_action
         
-        #rifattorizza come objective
+        #TODO fai tutto assieme
+        placed_tile_reward = placed_tile_reward / (penality + 1)
+        
+        #TODO rifattorizza come objective
         row_reward = 2 * row_analisys / (5 * (action_column_choice + 1))
         column_reward = 5 * (column_analisys / 15)
         color_reward = 7 * (color_analisys / 15)
-        reward =  placed_tile_reward + row_reward + column_reward + color_reward - penality
+        reward =  placed_tile_reward + row_reward + column_reward + color_reward
         
         #reward = 10 - self.game.penality_for_action
         
