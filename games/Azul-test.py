@@ -187,18 +187,20 @@ class Game(AbstractGame):
         """
 
         #TODO modifica per farlo entrare subito nel while
-        pit = input(f"Enter the pit to play for the player {self.to_play()}: ")
-        color = input(f"Enter the color to play for the player {self.to_play()}: ")
-        row = input(f"Enter the row to play for the player {self.to_play()}: ")
-        action_numerical = self.env.game.from_tuple_action_to_action(pit ,color ,row)
+        pit = int(input(f"Enter the pit to play for the player {self.to_play()}: "))
+        color = int(input(f"Enter the color to play for the player {self.to_play()}: "))
+        row = int(input(f"Enter the row to play for the player {self.to_play()}: "))
 
+        action_numerical = self.env.game.from_tuple_action_to_action(pit, color, row)
+        
         while action_numerical not in [action_numerical for action in self.legal_actions()]:
-            pit = input(f"Enter the pit to play for the player {self.to_play()}: ")
-            color = input(f"Enter the color to play for the player {self.to_play()}: ")
-            row = input(f"Enter the row to play for the player {self.to_play()}: ")
+            pit = int(input(f"Enter the pit to play for the player {self.to_play()}: "))
+            color = int(input(f"Enter the color to play for the player {self.to_play()}: "))
+            row = int(input(f"Enter the row to play for the player {self.to_play()}: "))
             action_numerical = self.env.game.from_tuple_action_to_action(pit ,color ,row)
-
+        
         return int(action_numerical)
+        
 
     def expert_agent(self):
         """
@@ -908,7 +910,6 @@ class Azul:
 
         if self.game.gameover :
             self.game = Azul_game()
-        
         else :
             self.game.create_drawing_pit()
         
@@ -955,23 +956,42 @@ class Azul:
         # else : 
         #    reward = 0
         
-        #TODO!
-        penality = self.game.penality_for_action
-        column_complete_reward = expected_column_point
-        row_complete_reward = expected_row_points
-        placed_tile_reward = self.game.inserted_tile_in_column_for_action
+        # penality = self.game.penality_for_action
+        # column_complete_reward = expected_column_point
+        # row_complete_reward = expected_row_points
+        # placed_tile_reward = self.game.inserted_tile_in_column_for_action
         
-        #TODO fai tutto assieme
-        placed_tile_reward = placed_tile_reward / (penality + 1)
+        # #TODO fai tutto assieme
+        # placed_tile_reward = placed_tile_reward / (penality + 1)
         
-        #TODO rifattorizza come objective
-        row_reward = 2 * row_analisys / (5 * (action_column_choice + 1))
-        column_reward = 5 * (column_analisys / 15)
-        color_reward = 7 * (color_analisys / 15)
-        reward =  placed_tile_reward + row_reward + column_reward + color_reward
+        # #TODO rifattorizza come objective
+        # row_reward = 2 * row_analisys / (5 * (action_column_choice + 1))
+        # column_reward = 5 * (column_analisys / 15)
+        # color_reward = 7 * (color_analisys / 15)
+        # reward =  placed_tile_reward + row_reward + column_reward + color_reward
         
-        #reward = 10 - self.game.penality_for_action
+        #eward = 10 - self.game.penality_for_action
+        #nuovo reward --- da provare su 300000 ---
+        #TODO cancella calculate Score sopra
+        reward = 0
+        remain_actions = 0
+
+        for pit in self.game.drawing_pit:
+             for tile in pit :
+                 if tile != 0 :
+                     remain_actions = remain_actions + 1
         
+        if remain_actions < 3 :
+
+            if self.game.player_turn == "P1":
+                self.game.calculate_score("P1")
+                reward =  self.env.game.p1_score
+            else:
+                self.game.calculate_score("P2")
+                reward =  self.game.p2_score
+            
+        print(self.game.player_turn, self.game.is_done_phase,reward)
+        ###########################################
         self.player = self.to_play()
 
         #self.player = 1 if self.game.play_turn == "P1" else 0
