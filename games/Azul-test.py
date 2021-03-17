@@ -985,7 +985,7 @@ class Azul:
 
             if self.game.player_turn == "P1":
                 self.game.calculate_score("P1")
-                reward =  self.env.game.p1_score
+                reward =  self.game.p1_score
             else:
                 self.game.calculate_score("P2")
                 reward =  self.game.p2_score
