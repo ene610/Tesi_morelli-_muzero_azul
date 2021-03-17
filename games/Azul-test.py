@@ -61,16 +61,16 @@ class MuZeroConfig:
 
         # Fully Connected Network
         self.encoding_size = 8
-        self.fc_representation_layers = []  # Define the hidden layers in the representation network
-        self.fc_dynamics_layers = [32]  # Define the hidden layers in the dynamics network
-        self.fc_reward_layers = [32]  # Define the hidden layers in the reward network
-        self.fc_value_layers = [32]  # Define the hidden layers in the value network
-        self.fc_policy_layers = [32]  # Define the hidden layers in the policy network
+        self.fc_representation_layers = [512]  # Define the hidden layers in the representation network
+        self.fc_dynamics_layers = [512]  # Define the hidden layers in the dynamics network
+        self.fc_reward_layers = [512]  # Define the hidden layers in the reward network
+        self.fc_value_layers = [512]  # Define the hidden layers in the value network
+        self.fc_policy_layers = [512]  # Define the hidden layers in the policy network
 
         ### Training
         self.results_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../results", os.path.basename(__file__)[:-3], datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S"))  # Path to store the model weights and TensorBoard logs
         self.save_model = True  # Save the checkpoint in results_path as model.checkpoint
-        self.training_steps = 300 * 1000  # Total number of training steps (ie weights update according to a batch)
+        self.training_steps = 600 * 1000  # Total number of training steps (ie weights update according to a batch)
         self.batch_size = 128  # Number of parts of games to train on at each training step
         self.checkpoint_interval = 10  # Number of training steps before using the model for self-playing
         self.value_loss_weight = 1  # Scale the value loss to avoid overfitting of the value function, paper recommends 0.25 (See paper appendix Reanalyze)
@@ -86,7 +86,7 @@ class MuZeroConfig:
         self.lr_decay_steps = 1000 
 
         ### Replay Buffer
-        self.replay_buffer_size = 5000  # Number of self-play games to keep in the replay buffer
+        self.replay_buffer_size = 15000  # Number of self-play games to keep in the replay buffer
         self.num_unroll_steps = 10  # Number of game moves to keep for every batch element
         self.td_steps = 20  # Number of steps in the future to take into account for calculating the target value
         self.PER = False  # Prioritized Replay (See paper appendix Training), select in priority the elements in the replay buffer which are unexpected for the network
@@ -990,7 +990,7 @@ class Azul:
                 self.game.calculate_score("P2")
                 reward =  self.game.p2_score
             
-        print(self.game.player_turn, self.game.is_done_phase,reward)
+        #print(self.game.player_turn, self.game.is_done_phase,reward)
         ###########################################
         self.player = self.to_play()
 
