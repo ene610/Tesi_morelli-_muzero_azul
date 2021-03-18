@@ -1005,7 +1005,7 @@ class Azul:
         else:
             reward = 0
 
-        reward = placed_tile_reward - penality
+        #reward = placed_tile_reward - penality
         ##########################
         self.player = self.to_play()
 
