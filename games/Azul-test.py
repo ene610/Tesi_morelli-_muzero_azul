@@ -1002,7 +1002,7 @@ class Azul:
             placed_tile_reward = self.game.inserted_tile_in_column_for_action
             penality = self.game.penality_for_action
             reward = placed_tile_reward - penality
-            print("P1",placed_tile_reward,penality)
+            
         else:
             reward = 0
 
