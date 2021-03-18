@@ -29,7 +29,7 @@ class MuZeroConfig:
         self.opponent = "expert"  # Hard coded agent that MuZero faces to assess his progress in multiplayer games. It doesn't influence training. None, "random" or "expert" if implemented in the Game class
 
         ### Self-Play
-        self.num_workers = 1  # Number of simultaneous threads/workers self-playing to feed the replay buffer
+        self.num_workers = 4  # Number of simultaneous threads/workers self-playing to feed the replay buffer
         self.selfplay_on_gpu = True
         self.max_moves = 30  # Maximum number of moves if game is not finished before
         self.num_simulations = 10  # Number of future moves self-simulated
@@ -70,7 +70,7 @@ class MuZeroConfig:
         ### Training
         self.results_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../results", os.path.basename(__file__)[:-3], datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S"))  # Path to store the model weights and TensorBoard logs
         self.save_model = True  # Save the checkpoint in results_path as model.checkpoint
-        self.training_steps = 600 * 1000  # Total number of training steps (ie weights update according to a batch)
+        self.training_steps = 300 * 1000  # Total number of training steps (ie weights update according to a batch)
         self.batch_size = 128  # Number of parts of games to train on at each training step
         self.checkpoint_interval = 10  # Number of training steps before using the model for self-playing
         self.value_loss_weight = 1  # Scale the value loss to avoid overfitting of the value function, paper recommends 0.25 (See paper appendix Reanalyze)
@@ -86,7 +86,7 @@ class MuZeroConfig:
         self.lr_decay_steps = 1000 
 
         ### Replay Buffer
-        self.replay_buffer_size = 15000  # Number of self-play games to keep in the replay buffer
+        self.replay_buffer_size = 1000  # Number of self-play games to keep in the replay buffer
         self.num_unroll_steps = 10  # Number of game moves to keep for every batch element
         self.td_steps = 20  # Number of steps in the future to take into account for calculating the target value
         self.PER = False  # Prioritized Replay (See paper appendix Training), select in priority the elements in the replay buffer which are unexpected for the network
@@ -998,7 +998,7 @@ class Azul:
         ###########################################
         #reward riempimento celle
 
-        if self.game.player_turn == "P1":
+        if player == "P1":
             placed_tile_reward = self.game.inserted_tile_in_column_for_action
             penality = self.game.penality_for_action
             reward = placed_tile_reward - penality
