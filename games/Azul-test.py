@@ -973,25 +973,40 @@ class Azul:
         #eward = 10 - self.game.penality_for_action
         #nuovo reward --- da provare su 300000 ---
         #TODO cancella calculate Score sopra
-        reward = 0
-        remain_actions = 0
+        # # reward = 0
+        # # remain_actions = 0
 
-        for pit in self.game.drawing_pit:
-             for tile in pit :
-                 if tile != 0 :
-                     remain_actions = remain_actions + 1
+        # # for pit in self.game.drawing_pit:
+        # #      for tile in pit :
+        # #          if tile != 0 :
+        # #              remain_actions = remain_actions + 1
         
-        if remain_actions < 3 :
+        # # if remain_actions < 3 :
 
-            if self.game.player_turn == "P1":
-                self.game.calculate_score("P1")
-                reward =  self.game.p1_score
-            else:
-                self.game.calculate_score("P2")
-                reward =  self.game.p2_score
+        # #     if self.game.player_turn == "P1":
+        # #         self.game.calculate_score("P1")
+        # #         reward =  self.game.p1_score
+        # #     else:
+        # #         self.game.calculate_score("P2")
+        # #         reward =  self.game.p2_score
             
-        #print(self.game.player_turn, self.game.is_done_phase,reward)
+        # # #print(self.game.player_turn, self.game.is_done_phase,reward)
+
+        
+
         ###########################################
+        #reward riempimento celle
+
+        if self.game.player_turn == "P1":
+            placed_tile_reward = self.game.inserted_tile_in_column_for_action
+            penality = self.game.penality_for_action
+            reward = placed_tile_reward - penality
+            print("P1",placed_tile_reward,penality)
+        else:
+            reward = 0
+
+        reward = placed_tile_reward - penality
+        ##########################
         self.player = self.to_play()
 
         #self.player = 1 if self.game.play_turn == "P1" else 0
