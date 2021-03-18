@@ -913,6 +913,7 @@ class Azul:
         else :
             self.game.create_drawing_pit()
         
+        self.game = Azul_game()
         #ToDO board azul 
         self.board = self.board_to_obs()
         self.player = 0 if self.game.play_turn == "P1" else 1 #cambia in to_play
