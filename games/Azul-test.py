@@ -29,7 +29,7 @@ class MuZeroConfig:
         self.opponent = "expert"  # Hard coded agent that MuZero faces to assess his progress in multiplayer games. It doesn't influence training. None, "random" or "expert" if implemented in the Game class
 
         ### Self-Play
-        self.num_workers = 3  # Number of simultaneous threads/workers self-playing to feed the replay buffer
+        self.num_workers = 1  # Number of simultaneous threads/workers self-playing to feed the replay buffer
         self.selfplay_on_gpu = True
         self.max_moves = 30  # Maximum number of moves if game is not finished before
         self.num_simulations = 10  # Number of future moves self-simulated
