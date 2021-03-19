@@ -719,7 +719,7 @@ class Azul_game():
 
             return tile_array[tile_type]
             
-        row, column, color, expected_row_points, expected_column_point = 0, 0, 0, 0, 0
+        row, column, color, expected_row_points, expected_column_point, column_completed = 0, 0, 0, 0, 0,0
 
         if player == "P1" :
 
@@ -732,7 +732,7 @@ class Azul_game():
             row_array = self.rows_p2
         
         if column_choice == 5:
-            return row, column, color, expected_row_points, expected_column_point
+            return row, column, color, expected_row_points, expected_column_point, column_completed
         
         count_tiles_in_column = 0
 
