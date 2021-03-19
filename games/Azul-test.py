@@ -743,12 +743,13 @@ class Azul_game():
         if count_tiles_in_column == (column_choice + 1):
             expected_row_points = compute_expected_row_points(row_array, column_choice, tile_type, board)
             expected_column_point = compute_expected_column_points(row_array, column_choice, tile_type, board)
-       
+        
+        column_completed = int(count_tiles_in_column == (column_choice + 1))
         row = count_tiles_in_column + action_analisys_row(board, column_choice)
         column = count_tiles_in_column + action_analisys_column(board, tile_type)
         color = count_tiles_in_column + action_analisys_color(board, tile_type)
 
-        return row, column, color, expected_row_points, expected_column_point
+        return row, column, color, expected_row_points, expected_column_point, column_completed
         
         def action_analisys_row(board, column_choice):
             count_tiles_in_row = 0
@@ -778,7 +779,7 @@ class Azul_game():
 
             for i in range(5):
                 for j in range(5):
-                    if(scoreboard[i][j] == 1):
+                    if(board[i][j] == 1):
                         tile_array[(i+j) % 5] = tile_array[(i+j) % 5] + 1 * i
                 i = i + 1
 
@@ -931,7 +932,7 @@ class Azul:
         player = self.game.player_turn
         self.game.play_turn(player, action_pit_choice, action_tile_type, action_column_choice)
 
-        row_analisys, column_analisys, color_analisys, expected_row_points, expected_column_point = self.game.action_analisys(player, action_tile_type, action_column_choice)
+        row_analisys, column_analisys, color_analisys, expected_row_points, expected_column_point, column_completed = self.game.action_analisys(player, action_tile_type, action_column_choice)
 
         self.game.is_turn_done()
         self.game.is_game_done()
@@ -939,12 +940,12 @@ class Azul:
         #controlla se è finito il turno
         #controlla se è finita la partita
 
-        if(self.game.is_done_phase):
+        if self.game.is_done_phase:
 
             self.game.calculate_score("P1")
             self.game.calculate_score("P2")
 
-            if(self.game.gameover):
+            if self.game.gameover:
                 self.game.compute_final_points()
     
         #reward
@@ -993,21 +994,30 @@ class Azul:
             
         # # #print(self.game.player_turn, self.game.is_done_phase,reward)
 
-        
-
         ###########################################
         #reward riempimento celle
 
+        # if player == "P1":
+            
+        #     placed_tile_reward = self.game.inserted_tile_in_column_for_action
+        #     penality = self.game.penality_for_action
+        #     reward = placed_tile_reward - penality
+            
+        # else:
+        #     reward = 0
+
+        ##########################
+        #reward riempimento row
+        
         if player == "P1":
+
             placed_tile_reward = self.game.inserted_tile_in_column_for_action
             penality = self.game.penality_for_action
-            reward = placed_tile_reward - penality
+            reward = column_completed * 2 + placed_tile_reward - penality
             
         else:
             reward = 0
 
-        #reward = placed_tile_reward - penality
-        ##########################
         self.player = self.to_play()
 
         #self.player = 1 if self.game.play_turn == "P1" else 0
