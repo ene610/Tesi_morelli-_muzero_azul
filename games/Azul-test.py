@@ -22,14 +22,14 @@ class MuZeroConfig:
         self.observation_shape = (1, 15, 12)  # Dimensions of the game observation, must be 3D (channel, height, width). For a 1D array, please reshape it to (1, 1, length of array)
         self.action_space = list(range(180))  # Fixed list of all possible actions. You should only edit the length
         self.players = list(range(2))  # List of players. You should only edit the length
-        self.stacked_observations = 5  # Number of previous observations and previous actions to add to the current observation
+        self.stacked_observations = 0  # Number of previous observations and previous actions to add to the current observation
 
         # Evaluate
         self.muzero_player = 0  # Turn Muzero begins to play (0: MuZero plays first, 1: MuZero plays second)
         self.opponent = "expert"  # Hard coded agent that MuZero faces to assess his progress in multiplayer games. It doesn't influence training. None, "random" or "expert" if implemented in the Game class
 
         ### Self-Play
-        self.num_workers = 4  # Number of simultaneous threads/workers self-playing to feed the replay buffer
+        self.num_workers = 1  # Number of simultaneous threads/workers self-playing to feed the replay buffer
         self.selfplay_on_gpu = True
         self.max_moves = 30  # Maximum number of moves if game is not finished before
         self.num_simulations = 10  # Number of future moves self-simulated
@@ -61,7 +61,7 @@ class MuZeroConfig:
 
         # Fully Connected Network
         self.encoding_size = 8
-        self.fc_representation_layers = [512]  # Define the hidden layers in the representation network
+        self.fc_representation_layers = []  # Define the hidden layers in the representation network
         self.fc_dynamics_layers = [512]  # Define the hidden layers in the dynamics network
         self.fc_reward_layers = [512]  # Define the hidden layers in the reward network
         self.fc_value_layers = [512]  # Define the hidden layers in the value network
@@ -70,7 +70,7 @@ class MuZeroConfig:
         ### Training
         self.results_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../results", os.path.basename(__file__)[:-3], datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S"))  # Path to store the model weights and TensorBoard logs
         self.save_model = True  # Save the checkpoint in results_path as model.checkpoint
-        self.training_steps = 300 * 1000  # Total number of training steps (ie weights update according to a batch)
+        self.training_steps = 100 * 1000  # Total number of training steps (ie weights update according to a batch)
         self.batch_size = 128  # Number of parts of games to train on at each training step
         self.checkpoint_interval = 10  # Number of training steps before using the model for self-playing
         self.value_loss_weight = 1  # Scale the value loss to avoid overfitting of the value function, paper recommends 0.25 (See paper appendix Reanalyze)
@@ -719,7 +719,7 @@ class Azul_game():
 
             return tile_array[tile_type]
             
-        row, column, color, expected_row_points, expected_column_point, column_completed = 0, 0, 0, 0, 0,0
+        row, column, color, expected_row_points, expected_column_point, column_completed = 0, 0, 0, 0, 0, 0
 
         if player == "P1" :
 
