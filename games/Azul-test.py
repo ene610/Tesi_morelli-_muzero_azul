@@ -7,7 +7,6 @@ import torch
 import pandas as pd
 import numpy as np
 from .abstract_game import AbstractGame
-import deepcopy
 
 
 
