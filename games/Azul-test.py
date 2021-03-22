@@ -1005,9 +1005,9 @@ class Azul:
         for pit in self.game.drawing_pit:
             
             for tile in pit:
-                if tile != 0   
+                if tile != 0 : 
                     count_avaible_tiles_in_pit = count_avaible_tiles_in_pit + 1
-                    
+
         if count_avaible_tiles_in_pit < 2 :
             if self.player == "P1"
                 self.game.calculate_score("P1")
