@@ -911,7 +911,7 @@ class Azul:
             count = 0
             row_obs = []
 
-            for tile in self.game.rows_p1[i]
+            for tile in self.game.rows_p1[i]:
                 if tile != 0:
                     count = 0
             row_obs = [self.game.rows_p1, count] + self.game.board_p1[i]
@@ -931,7 +931,7 @@ class Azul:
             count = 0
             row_obs = []
 
-            for tile in self.game.rows_p2[i]
+            for tile in self.game.rows_p2[i]:
                 if tile != 0:
                     count = 0
             row_obs = [self.game.rows_p2, count] + self.game.board_p2[i]
@@ -941,7 +941,7 @@ class Azul:
         for tile in self.game.penalty_row_p2:
             if tile != 0:
                 count = count + 1
-        
+        #commento ciaone
         row_obs = [count, 0, 0, 0, 0, 0, 0]
         obs_rows_p2.append(row_obs)
         
