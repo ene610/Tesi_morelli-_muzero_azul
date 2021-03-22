@@ -7,7 +7,7 @@ import torch
 import pandas as pd
 import numpy as np
 from .abstract_game import AbstractGame
-
+import deepcopy
 
 
 
@@ -857,7 +857,7 @@ class Azul:
         #ToDO board azul
         self.board = self.board_to_obs()
 
-    def board_to_obs(self):
+    def board_to_obs_old(self):
 
         # processo per p1 ----------------------------------------------
         lst_penality_p1_and_score = self.game.penalty_row_p1 + [0, self.game.p1_score]
@@ -902,8 +902,58 @@ class Azul:
         #print(complete_board_players)   
         complete_board =  np.concatenate([complete_board_players,complete_board_common_pit], axis=0)
         #print(complete_board.shape)
-        return [complete_board]
+        return [complete_board_p1,complete_board_p2]
+    def board_to_obs(self):
 
+        obs_rows_p1 = []
+
+        for i in range(5):
+            count = 0
+            row_obs = []
+
+            for tile in self.game.rows_p1[i]
+                if tile != 0:
+                    count = 0
+            row_obs = [self.game.rows_p1, count] + self.game.board_p1[i]
+            obs_rows_p1.append(row_obs)
+        
+        count = 0 
+        for tile in self.game.penalty_row_p1:
+            if tile != 0:
+                count = count + 1
+        
+        row_obs = [count, 0, 0, 0, 0, 0, 0]
+        obs_rows_p1.append(row_obs)
+        ############# pure per P2 ############################
+        obs_rows_p2 = []
+
+        for i in range(5):
+            count = 0
+            row_obs = []
+
+            for tile in self.game.rows_p2[i]
+                if tile != 0:
+                    count = 0
+            row_obs = [self.game.rows_p2, count] + self.game.board_p2[i]
+            obs_rows_p2.append(row_obs)
+        
+        count = 0 
+        for tile in self.game.penalty_row_p2:
+            if tile != 0:
+                count = count + 1
+        
+        row_obs = [count, 0, 0, 0, 0, 0, 0]
+        obs_rows_p2.append(row_obs)
+        
+
+        pit_obs = []
+        for pit in self.game.drawing_pit:
+            temp= pit + [-1, -1]
+            pit_obs.append(temp)
+
+        print([obs_rows_p1, obs_rows_p2, pit_obs])
+
+        return [obs_rows_p1, obs_rows_p2, pit_obs]
     def to_play(self):
         return 0 if self.game.player_turn == "P1" else 1
 
@@ -1009,18 +1059,21 @@ class Azul:
         ##########################
         #reward riempimento row
         
-        if player == "P1":
-
-            placed_tile_reward = self.game.inserted_tile_in_column_for_action
-            penality = self.game.penality_for_action
-            reward = column_completed * 2 + placed_tile_reward - penality
+        # if player == "P1":
             
-        else:
-            reward = 0
-
+        #     placed_tile_reward = self.game.inserted_tile_in_column_for_action
+        #     penality = self.game.penality_for_action
+        #     reward = column_completed * 2 + placed_tile_reward - penality
+            
+        # else:
+        #     reward = 0
+        if player == "P1":
+            if self.game.is_done_phase:
+                reward = self.game.p1_score
+         else:
+             reward = 0
+        ######################
         self.player = self.to_play()
-
-        #self.player = 1 if self.game.play_turn == "P1" else 0
 
         return self.get_observation(), reward, done
 
