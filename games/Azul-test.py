@@ -1067,11 +1067,11 @@ class Azul:
             
         # else:
         #     reward = 0
+        reward = 0
         if player == "P1":
             if self.game.is_done_phase:
                 reward = self.game.p1_score
-         else:
-             reward = 0
+        
         ######################
         self.player = self.to_play()
 
