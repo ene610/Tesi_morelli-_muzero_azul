@@ -960,7 +960,7 @@ class Azul:
         print("exit_obs_p2",obs_rows_p2, type(obs_rows_p2))
         print("exit_obs_pit",obs_pit, type(obs_pit))
 
-        return np.array([obs_rows_p1, obs_rows_p2, pit_obs])
+        return np.array([obs_rows_p1, obs_rows_p2, obs_pit])
     def to_play(self):
         return 0 if self.game.player_turn == "P1" else 1
 
