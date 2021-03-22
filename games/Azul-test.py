@@ -1009,7 +1009,7 @@ class Azul:
                     count_avaible_tiles_in_pit = count_avaible_tiles_in_pit + 1
 
         if count_avaible_tiles_in_pit < 2 :
-            if self.player == "P1"
+            if self.player == "P1":
                 self.game.calculate_score("P1")
             else : 
                 self.game.calculate_score("P2")
