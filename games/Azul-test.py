@@ -18,7 +18,7 @@ class MuZeroConfig:
         self.max_num_gpus = None  # Fix the maximum number of GPUs to use. It's usually faster to use a single GPU (set it to 1) if it has enough memory. None will use every GPUs available
 
         ### Game
-        self.observation_shape = (1, 15, 12)  # Dimensions of the game observation, must be 3D (channel, height, width). For a 1D array, please reshape it to (1, 1, length of array)
+        self.observation_shape = (3, 6, 7)  # Dimensions of the game observation, must be 3D (channel, height, width). For a 1D array, please reshape it to (1, 1, length of array)
         self.action_space = list(range(180))  # Fixed list of all possible actions. You should only edit the length
         self.players = list(range(2))  # List of players. You should only edit the length
         self.stacked_observations = 0  # Number of previous observations and previous actions to add to the current observation
@@ -902,6 +902,7 @@ class Azul:
         complete_board =  np.concatenate([complete_board_players,complete_board_common_pit], axis=0)
         #print(complete_board.shape)
         return [complete_board_p1,complete_board_p2]
+    
     def board_to_obs(self):
 
         obs_rows_p1 = []
@@ -913,16 +914,18 @@ class Azul:
             for tile in self.game.rows_p1[i]:
                 if tile != 0:
                     count = 0
-            row_obs = [self.game.rows_p1, count] + self.game.board_p1[i]
-            obs_rows_p1.append(row_obs)
+            row_obs = [self.game.rows_p1[i][0], count] + self.game.board_p1[i].tolist()
+            obs_rows_p1.append(np.asarray(row_obs))
         
         count = 0 
         for tile in self.game.penalty_row_p1:
             if tile != 0:
                 count = count + 1
         
-        row_obs = [count, 0, 0, 0, 0, 0, 0]
+        row_obs = np.asarray([count, 0, 0, 0, 0, 0, 0])
         obs_rows_p1.append(row_obs)
+        obs_rows_p1 = np.asarray(obs_rows_p1,dtype=np.int8) 
+
         ############# pure per P2 ############################
         obs_rows_p2 = []
 
@@ -933,26 +936,27 @@ class Azul:
             for tile in self.game.rows_p2[i]:
                 if tile != 0:
                     count = 0
-            row_obs = [self.game.rows_p2, count] + self.game.board_p2[i]
-            obs_rows_p2.append(row_obs)
+            row_obs = [self.game.rows_p2, count] + self.game.board_p2[i].tolist()
+            obs_rows_p2.append(np.asarray(row_obs))
         
         count = 0 
         for tile in self.game.penalty_row_p2:
             if tile != 0:
                 count = count + 1
         #commento ciaone
-        row_obs = [count, 0, 0, 0, 0, 0, 0]
+        row_obs = np.asarray([count, 0, 0, 0, 0, 0, 0])
         obs_rows_p2.append(row_obs)
-        
+        obs_rows_p2 = np.asarray(obs_rows_p2,dtype=np.int8) 
 
         pit_obs = []
         for pit in self.game.drawing_pit:
-            temp= pit + [-1, -1]
+            temp= pit + [0, 0]
             pit_obs.append(temp)
+        pit_obs = np.asarray(pit_obs,dtype=np.int8) 
 
-        print([obs_rows_p1, obs_rows_p2, pit_obs])
+        print("exit_obs",[obs_rows_p1, obs_rows_p2, pit_obs])
 
-        return [obs_rows_p1, obs_rows_p2, pit_obs]
+        return np.array([obs_rows_p1, obs_rows_p2, pit_obs])
     def to_play(self):
         return 0 if self.game.player_turn == "P1" else 1
 
