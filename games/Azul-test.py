@@ -856,7 +856,7 @@ class Azul:
         #ToDO board azul
         self.board = self.board_to_obs()
 
-    def board_to_obs_old(self):
+    def board_to_obs_1D(self):
 
         # processo per p1 ----------------------------------------------
         lst_penality_p1_and_score = self.game.penalty_row_p1 + [0, self.game.p1_score]
@@ -948,7 +948,7 @@ class Azul:
         obs_rows_p2.append(row_obs)
         obs_rows_p2 = np.asarray(obs_rows_p2,dtype=np.int8) 
 
-######## per i PIT ####################
+        ######## per i PIT ####################
 
         obs_pit = []
         for pit in self.game.drawing_pit:
@@ -956,11 +956,8 @@ class Azul:
             obs_pit.append(temp)
         obs_pit = np.asarray(obs_pit,dtype=np.int8) 
 
-        print("exit_obs_p1",obs_rows_p1, type(obs_rows_p1))
-        print("exit_obs_p2",obs_rows_p2, type(obs_rows_p2))
-        print("exit_obs_pit",obs_pit, type(obs_pit))
-
         return np.array([obs_rows_p1, obs_rows_p2, obs_pit])
+
     def to_play(self):
         return 0 if self.game.player_turn == "P1" else 1
 
@@ -997,15 +994,25 @@ class Azul:
         #controlla se è finito il turno
         #controlla se è finita la partita
 
-        if self.game.is_done_phase:
+        # if self.game.is_done_phase:
 
-            self.game.calculate_score("P1")
-            self.game.calculate_score("P2")
+        #     self.game.calculate_score("P1")
+        #     self.game.calculate_score("P2")
 
-            if self.game.gameover:
-                self.game.compute_final_points()
-    
-        #reward
+        #     if self.game.gameover:
+        #         self.game.compute_final_points()
+        count_avaible_tiles_in_pit = 0
+        for pit in self.game.drawing_pit:
+            
+            for tile in pit:
+                if tile != 0   
+                    count_avaible_tiles_in_pit = count_avaible_tiles_in_pit + 1
+                    
+        if count_avaible_tiles_in_pit < 2 :
+            if self.player == "P1"
+                self.game.calculate_score("P1")
+            else : 
+                self.game.calculate_score("P2")
         #prossimo player
 
         done = self.have_winner()
