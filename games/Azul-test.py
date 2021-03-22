@@ -936,25 +936,29 @@ class Azul:
             for tile in self.game.rows_p2[i]:
                 if tile != 0:
                     count = 0
-            row_obs = [self.game.rows_p2, count] + self.game.board_p2[i].tolist()
+            row_obs = [self.game.rows_p2[i][0], count] + self.game.board_p2[i].tolist()
             obs_rows_p2.append(np.asarray(row_obs))
         
         count = 0 
         for tile in self.game.penalty_row_p2:
             if tile != 0:
                 count = count + 1
-        #commento ciaone
+        
         row_obs = np.asarray([count, 0, 0, 0, 0, 0, 0])
         obs_rows_p2.append(row_obs)
         obs_rows_p2 = np.asarray(obs_rows_p2,dtype=np.int8) 
 
-        pit_obs = []
+######## per i PIT ####################
+
+        obs_pit = []
         for pit in self.game.drawing_pit:
             temp= pit + [0, 0]
-            pit_obs.append(temp)
-        pit_obs = np.asarray(pit_obs,dtype=np.int8) 
+            obs_pit.append(temp)
+        obs_pit = np.asarray(obs_pit,dtype=np.int8) 
 
-        print("exit_obs",[obs_rows_p1, obs_rows_p2, pit_obs])
+        print("exit_obs_p1",obs_rows_p1, type(obs_rows_p1))
+        print("exit_obs_p2",obs_rows_p2, type(obs_rows_p2))
+        print("exit_obs_pit",obs_pit, type(obs_pit))
 
         return np.array([obs_rows_p1, obs_rows_p2, pit_obs])
     def to_play(self):
