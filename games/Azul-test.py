@@ -994,25 +994,27 @@ class Azul:
         #controlla se è finito il turno
         #controlla se è finita la partita
 
-        # if self.game.is_done_phase:
+         if self.game.is_done_phase:
 
-        #     self.game.calculate_score("P1")
-        #     self.game.calculate_score("P2")
+             self.game.calculate_score("P1")
+             self.game.calculate_score("P2")
 
-        #     if self.game.gameover:
-        #         self.game.compute_final_points()
-        count_avaible_tiles_in_pit = 0
-        for pit in self.game.drawing_pit:
+             if self.game.gameover:
+                self.game.compute_final_points()
+
+
+        # count_avaible_tiles_in_pit = 0
+        # for pit in self.game.drawing_pit:
             
-            for tile in pit:
-                if tile != 0 : 
-                    count_avaible_tiles_in_pit = count_avaible_tiles_in_pit + 1
+        #     for tile in pit:
+        #         if tile != 0 : 
+        #             count_avaible_tiles_in_pit = count_avaible_tiles_in_pit + 1
 
-        if count_avaible_tiles_in_pit < 2 :
-            if self.player == "P1":
-                self.game.calculate_score("P1")
-            else : 
-                self.game.calculate_score("P2")
+        # if count_avaible_tiles_in_pit < 2 :
+        #     if self.player == "P1":
+        #         self.game.calculate_score("P1")
+        #     else : 
+        #         self.game.calculate_score("P2")
         #prossimo player
 
         done = self.have_winner()
@@ -1073,18 +1075,18 @@ class Azul:
         ##########################
         #reward riempimento row
         
-        # if player == "P1":
+         if player == "P1":
             
-        #     placed_tile_reward = self.game.inserted_tile_in_column_for_action
-        #     penality = self.game.penality_for_action
-        #     reward = column_completed * 2 + placed_tile_reward - penality
+            placed_tile_reward = self.game.inserted_tile_in_column_for_action
+            penality = self.game.penality_for_action * 5
+            reward = column_completed * 5 + placed_tile_reward - penality
             
         # else:
         #     reward = 0
-        reward = 0
-        if player == "P1":
-            if self.game.is_done_phase:
-                reward = self.game.p1_score
+        # reward = 0
+        # if player == "P1":
+        #     if self.game.is_done_phase:
+        #         reward = self.game.p1_score
         
         ######################
         self.player = self.to_play()
