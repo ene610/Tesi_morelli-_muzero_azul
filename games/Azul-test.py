@@ -994,12 +994,12 @@ class Azul:
         #controlla se è finito il turno
         #controlla se è finita la partita
 
-         if self.game.is_done_phase:
+        if self.game.is_done_phase:
 
-             self.game.calculate_score("P1")
-             self.game.calculate_score("P2")
+            self.game.calculate_score("P1")
+            self.game.calculate_score("P2")
 
-             if self.game.gameover:
+            if self.game.gameover:
                 self.game.compute_final_points()
 
 
