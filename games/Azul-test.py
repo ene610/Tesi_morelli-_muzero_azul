@@ -1075,8 +1075,7 @@ class Azul:
         ##########################
         #reward riempimento row
         
-         if player == "P1":
-            
+        if player == "P1":
             placed_tile_reward = self.game.inserted_tile_in_column_for_action
             penality = self.game.penality_for_action * 5
             reward = column_completed * 5 + placed_tile_reward - penality
