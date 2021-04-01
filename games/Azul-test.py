@@ -49,8 +49,8 @@ class MuZeroConfig:
         
         # Residual Network
         self.downsample = False  # Downsample observations before representation network, False / "CNN" (lighter) / "resnet" (See paper appendix Network Architecture)
-        self.blocks = 1  # Number of blocks in the ResNet
-        self.channels = 1  # Number of channels in the ResNet
+        self.blocks = 15  # Number of blocks in the ResNet
+        self.channels = 10  # Number of channels in the ResNet
         self.reduced_channels_reward = 2  # Number of channels in reward head
         self.reduced_channels_value = 2  # Number of channels in value head
         self.reduced_channels_policy = 2  # Number of channels in policy head
@@ -80,8 +80,8 @@ class MuZeroConfig:
         self.momentum = 0.9  # Used only if optimizer is SGD
 
         # Exponential learning rate schedule
-        self.lr_init = 0.005  # Initial learning rate
-        self.lr_decay_rate = 1  # Set it to 1 to use a constant learning rate
+        self.lr_init = 1  # Initial learning rate
+        self.lr_decay_rate = 0.0001  # Set it to 1 to use a constant learning rate
         self.lr_decay_steps = 1000 
 
         ### Replay Buffer
