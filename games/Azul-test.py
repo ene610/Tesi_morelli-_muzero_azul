@@ -69,10 +69,10 @@ class MuZeroConfig:
         ### Training
         self.results_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "../results", os.path.basename(__file__)[:-3], datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S"))  # Path to store the model weights and TensorBoard logs
         self.save_model = True  # Save the checkpoint in results_path as model.checkpoint
-        self.training_steps = 100 * 1000  # Total number of training steps (ie weights update according to a batch)
+        self.training_steps = 30 * 1000  # Total number of training steps (ie weights update according to a batch)
         self.batch_size = 128  # Number of parts of games to train on at each training step
         self.checkpoint_interval = 10  # Number of training steps before using the model for self-playing
-        self.value_loss_weight = 1  # Scale the value loss to avoid overfitting of the value function, paper recommends 0.25 (See paper appendix Reanalyze)
+        self.value_loss_weight = 0.25  # Scale the value loss to avoid overfitting of the value function, paper recommends 0.25 (See paper appendix Reanalyze) noi usiamo 1
         self.train_on_gpu = torch.cuda.is_available()  # Train on GPU if available
 
         self.optimizer = "Adam"  # "Adam" or "SGD". Paper uses SGD
@@ -253,7 +253,6 @@ class Azul_game():
 
         self.inserted_tile_in_column_for_action = 0
         self.penality_for_action = 0
-
 
     def initialize_rows(self):
 
@@ -696,11 +695,10 @@ class Azul_game():
         def action_analisys_column(board, tile_type):
             
             cumulative = np.array([0,0,0,0,0])
-            i = 1
+            
             for row in board:
-                np.array(row) * i
+                np.array(row) 
                 cumulative = np.add(cumulative, row)
-                i + 1
                     
             return cumulative[tile_type]       
 
@@ -1073,13 +1071,13 @@ class Azul:
         #     reward = 0
 
         ##########################
-        #reward riempimento row
-        reward = 0
+        #reward riempimento row QUESTO é ultimo reward provato e funzionato
+        # reward = 0
         
-        if player == "P1":
-            placed_tile_reward = self.game.inserted_tile_in_column_for_action
-            penality = self.game.penality_for_action * 5
-            reward = column_completed * 5 + placed_tile_reward - penality
+        # if player == "P1":
+        #     placed_tile_reward = self.game.inserted_tile_in_column_for_action
+        #     penality = self.game.penality_for_action * 5
+        #     reward = column_completed * 5 + placed_tile_reward - penality
             
         # else:
         #     reward = 0
@@ -1089,6 +1087,9 @@ class Azul:
         #         reward = self.game.p1_score
         
         ######################
+
+        reward = self.game.inserted_tile_in_column_for_action + expected_row_points + expected_column_point - self.game.penality_for_action
+
         self.player = self.to_play()
 
         return self.get_observation(), reward, done
